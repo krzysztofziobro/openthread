@@ -266,6 +266,13 @@ void RadioSpinel<InterfaceType, ProcessContextType>::Init(bool aResetRadio,
         SuccessOrDie(CheckRadioCapabilities());
     }
 
+
+#ifdef OPENTHREAD_CONFIG_MAC_HEADER_IE_SUPPORT
+    memset(&mTxIeInfo, 0, sizeof(otRadioIeInfo));
+    mTxRadioFrame.mInfo.mTxInfo.mIeInfo = &mTxIeInfo;
+#endif //OPENTHREAD_CONFIG_MAC_HEADER_IE_SUPPORT
+
+
     mRxRadioFrame.mPsdu  = mRxPsdu;
     mTxRadioFrame.mPsdu  = mTxPsdu;
     mAckRadioFrame.mPsdu = mAckPsdu;
@@ -1900,6 +1907,24 @@ otError RadioSpinel<InterfaceType, ProcessContextType>::Transmit(otRadioFrame &a
     VerifyOrExit(mState == kStateReceive || (mState == kStateSleep && (mRadioCaps & OT_RADIO_CAPS_SLEEP_TO_TX)));
 
     mTransmitFrame = &aFrame;
+
+#if OPENTHREAD_CONFIG_TIME_SYNC_ENABLE
+    if (mTransmitFrame->mInfo.mTxInfo.mIeInfo->mTimeIeOffset != 0)
+    {
+        uint8_t *timeIe = mTransmitFrame->mPsdu + mTransmitFrame->mInfo.mTxInfo.mIeInfo->mTimeIeOffset;
+        uint64_t time   = otPlatTimeGet() + mTransmitFrame->mInfo.mTxInfo.mIeInfo->mNetworkTimeOffset;
+
+        *timeIe = mTransmitFrame->mInfo.mTxInfo.mIeInfo->mTimeSyncSeq;
+
+        *(++timeIe) = (uint8_t)(time & 0xff);
+        for (uint8_t i = 1; i < sizeof(uint64_t); i++)
+        {
+            time        = time >> 8;
+            *(++timeIe) = (uint8_t)(time & 0xff);
+        }
+    }
+#endif //OPENTHREAD_CONFIG_TIME_SYNC_ENABLE
+
 
     // `otPlatRadioTxStarted()` is triggered immediately for now, which may be earlier than real started time.
     otPlatRadioTxStarted(mInstance, mTransmitFrame);
