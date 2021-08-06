@@ -2984,7 +2984,7 @@ otError Interpreter::ProcessNetworkTime(Arg aArgs[])
 
         networkTimeStatus = otNetworkTimeGet(mInstance, &time);
 
-        OutputFormat("Network Time:     %luus", time);
+	OutputFormat("Network Time:     %lldus", time);
 
         switch (networkTimeStatus)
         {
