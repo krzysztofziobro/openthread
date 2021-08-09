@@ -1912,7 +1912,7 @@ otError RadioSpinel<InterfaceType, ProcessContextType>::Transmit(otRadioFrame &a
     if (mTransmitFrame->mInfo.mTxInfo.mIeInfo->mTimeIeOffset != 0)
     {
         uint8_t *timeIe = mTransmitFrame->mPsdu + mTransmitFrame->mInfo.mTxInfo.mIeInfo->mTimeIeOffset;
-        uint64_t time   = otPlatTimeGet() + mTransmitFrame->mInfo.mTxInfo.mIeInfo->mNetworkTimeOffset;
+        uint64_t time = (uint64_t)((int64_t)otPlatTimeGet() + sTransmitFrame.mInfo.mTxInfo.mIeInfo->mNetworkTimeOffset);
 
         *timeIe = mTransmitFrame->mInfo.mTxInfo.mIeInfo->mTimeSyncSeq;
 
