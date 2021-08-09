@@ -60,8 +60,8 @@ Link::Link(Instance &aInstance)
     mTxFrame.mPsdu = &mTxPacketBuffer[kMaxHeaderSize];
     mTxFrame.SetLength(0);
 
-#ifdef OPENTHREAD_CONFIG_MAC_HEADER_IE_SUPPORT
-    memset(&mTxIeInfo, 0, sizeof(otRadioIeInfo));
+#if OPENTHREAD_CONFIG_MAC_HEADER_IE_SUPPORT && OPENTHREAD_CONFIG_TIME_SYNC_ENABLE
+    memset(&mTxIeInfo, 0, sizeof(mTxIeInfo));
     mTxFrame.mInfo.mTxInfo.mIeInfo = &mTxIeInfo;
 #endif
 

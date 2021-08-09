@@ -267,7 +267,7 @@ void RadioSpinel<InterfaceType, ProcessContextType>::Init(bool aResetRadio,
     }
 
 
-#ifdef OPENTHREAD_CONFIG_MAC_HEADER_IE_SUPPORT
+#if OPENTHREAD_CONFIG_MAC_HEADER_IE_SUPPORT && OPENTHREAD_CONFIG_TIME_SYNC_ENABLE
     memset(&mTxIeInfo, 0, sizeof(otRadioIeInfo));
     mTxRadioFrame.mInfo.mTxInfo.mIeInfo = &mTxIeInfo;
 #endif //OPENTHREAD_CONFIG_MAC_HEADER_IE_SUPPORT

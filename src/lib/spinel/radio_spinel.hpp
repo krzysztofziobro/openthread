@@ -943,7 +943,7 @@ private:
     uint8_t       mRxPsdu[OT_RADIO_FRAME_MAX_SIZE];
     uint8_t       mTxPsdu[OT_RADIO_FRAME_MAX_SIZE];
     uint8_t       mAckPsdu[OT_RADIO_FRAME_MAX_SIZE];
-#ifdef OPENTHREAD_CONFIG_MAC_HEADER_IE_SUPPORT
+#if OPENTHREAD_CONFIG_MAC_HEADER_IE_SUPPORT && OPENTHREAD_CONFIG_TIME_SYNC_ENABLE
     otRadioIeInfo mTxIeInfo;
 #endif
     otRadioFrame  mRxRadioFrame;
