@@ -228,6 +228,11 @@ OT_TOOL_WEAK uint64_t otPlatTimeGet(void)
     return UINT64_MAX;
 }
 
+OT_TOOL_WEAK uint16_t otPlatTimeGetXtalAccuracy(void)
+{
+    return 0;
+}
+
 OT_TOOL_WEAK uint64_t otPlatRadioGetNow(otInstance *aInstance)
 {
     OT_UNUSED_VARIABLE(aInstance);

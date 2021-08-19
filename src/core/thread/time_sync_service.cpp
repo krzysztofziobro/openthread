@@ -113,9 +113,10 @@ void TimeSync::HandleTimeSyncMessage(const Message &aMessage)
         if (mTimeSyncSeq == OT_TIME_SYNC_INVALID_SEQ || timeSyncSeqDelta > 0 || Get<Mle::MleRouter>().IsDetached())
         {
             // Update network time and forward it.
+            int64_t radioHostTimeOffset = otPlatRadioGetNow(&GetInstance()) - otPlatTimeGet();
             mLastTimeSyncReceived = TimerMilli::GetNow();
             mTimeSyncSeq          = aMessage.GetTimeSyncSeq();
-            mNetworkTimeOffset    = aMessage.GetNetworkTimeOffset();
+            mNetworkTimeOffset    = aMessage.GetNetworkTimeOffset() + radioHostTimeOffset;
             mTimeSyncRequired     = true;
 
             otLogInfoCore("Newer time sync seq:%u received. Forwarding", mTimeSyncSeq);
